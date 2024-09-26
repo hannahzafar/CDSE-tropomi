@@ -6,4 +6,3 @@ dependencies:
   - ipykernel
   - jupyterlab
   - pandas
-prefix: /Users/hzafar/anaconda3/envs/tropomi_download
