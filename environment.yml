@@ -1,4 +1,3 @@
-name: tropomi
 channels:
   - nodefaults
   - conda-forge
@@ -7,4 +6,3 @@ dependencies:
   - jupyterlab
   - pandas
   - requests
-prefix: /Users/hzafar/miniforge3/envs/tropomi
