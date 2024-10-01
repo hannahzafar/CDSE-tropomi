@@ -1,8 +1,10 @@
-name: tropomi_download
+name: tropomi
 channels:
-  - defaults
+  - nodefaults
+  - conda-forge
 dependencies:
-  - requests
   - ipykernel
   - jupyterlab
   - pandas
+  - requests
+prefix: /Users/hzafar/miniforge3/envs/tropomi
