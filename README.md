@@ -1,3 +1,3 @@
-This repository includes scripts related to access of TROPOMI data from the Copernicus Data Space Ecosystem (CDSE). The repo includes a Jupyter Notebook titled tropomi_data_download.ipynb that provides a detailed step-by-step exploration process and a script tropomi_data_download.py to download data.
+This repository includes scripts related to access of TROPOMI CH4 and CO data from the Copernicus Data Space Ecosystem (CDSE). The repo includes a Jupyter Notebook titled tropomi_data_download.ipynb that provides a detailed step-by-step exploration process and a script tropomi_data_download.py to download data.
 
 Users will need a Copernicus Data Space Ecosystem account to access CDSE data, which can be created for free at https://identity.dataspace.copernicus.eu/auth/realms/CDSE/login-actions/registration?client_id=cdse-public&tab_id=pbzgerxA-tk.
