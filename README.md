@@ -1,1 +1,1 @@
-This repo includes python scripts to access and download TROPOMI data from the Copernicus Data Space Ecosystem.
+This repo includes scripts related to access of TROPOMI data from the Copernicus Data Space Ecosystem. A Jupyter Notebook for exploration of the process and a .py script for running a download request are both included. Users will need a Copernicus Data Space Ecosystem account, which can be created for free at https://identity.dataspace.copernicus.eu/auth/realms/CDSE/login-actions/registration?client_id=cdse-public&tab_id=pbzgerxA-tk.
