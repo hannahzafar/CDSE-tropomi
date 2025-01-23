@@ -49,9 +49,8 @@ client_id = 'cdse-public'
 token_url = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
 grant_type = 'password'
 
-# Locate authentication credentials
-home_dir = os.path.expanduser("~")
-auth_path = home_dir + '/.copernicus_auth.ini'
+# Locate authentication credentials (saved in same folder as script)
+auth_path = './.copernicus_auth.ini'
 
 # Obtain Authentication Token
 while True:
