@@ -51,8 +51,15 @@ client_id = 'cdse-public'
 token_url = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
 grant_type = 'password'
 
-# Locate authentication credentials (saved in same folder as script)
-auth_path = './.copernicus_auth.ini'
+# Locate authentication credentials
+primary_path = './.copernicus_auth.ini'
+backup_path ='./.copernicus_auth.example.ini' 
+if os.path.exists(primary_path) and os.path.isfile(primary_path):
+    auth_path = primary_path
+elif os.path.exists(backup_path) and os.path.isfile(backup_path):
+    auth_path = backup_path
+else:
+    raise FileNotFoundError("Authentication credentials not found (refer to documentation)")
 
 # Obtain Authentication Token
 while True:
@@ -76,7 +83,7 @@ while True:
              print('Token not found in the response')
     else:
         text_dict = json.loads(response.text)
-        print(f'Failed to obtain Authentication Token. Error: {text_dict['error_description']}')
+        print(f'Failed to obtain Authentication Token. Error: {text_dict["error_description"]}')
 
 # Perform OpenSearch Query:
 opensearch_url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel5P/search.json'
