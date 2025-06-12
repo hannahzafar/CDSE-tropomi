@@ -115,29 +115,27 @@ headers = {"Authorization": f"Bearer {access_token}"}
 session = requests.Session()
 session.headers.update(headers)
 
-## Define download folder name
-download_directory = 'tropomi_download_' +  product + '_' + date_str
+## Create download directory
+download_dir = 'tropomi_download_' +  product + '_' + date_str
+os.makedirs(download_dir)
+# os.makedirs(download_dir, exist_ok = True)
 
 ## Loop over queries to extract
 for url, title in zip(urls, titles):
-    filename = title[:-3] + '.zip'
-    response = session.get(url, stream=True) # Make GET request for url
-    
-        # zip_buffer = io.BytesIO(response.content) # create file for ZIP  memory
-        print(from_buffer(response.content)) #NOTE: This is no longer a zip file! Now its hdf5
-
-        # print(f" URL: {url} \n Title: {title}")
-        # print(f"Status: {response.status_code}, Content-Type: {response.headers.get('Content-Type')}")
-        # print(response.text[:20])
-
-        ds = xr.open_dataset(io.BytesIO(response.content))
-        print(ds)
-        for key, value in ds.attrs.items():
-            print(f"{key}: {repr(value)}")
-        sys.exit()
-
-    else: 
-        print(f"Failed to download: {filename} from {url} (Status code: {response.status_code})") 
-        print(response.text)
-
+    # Get request
+    response = session.get(url, stream=True)
     response.raise_for_status()
+    # print(from_buffer(response.content)) #NOTE: This is no longer a zip file! Now its hdf5
+
+    # Path to save file
+    path = os.path.join(download_dir, title)
+
+    # Write to file
+    with open(path, "wb") as f:
+        f.write(response.content)
+        # Option to chunk
+        # for chunk in response.iter_content(chunk_size=8192):
+        #     if chunk:
+        #         f.write(chunk)
+
+print('Download complete')
