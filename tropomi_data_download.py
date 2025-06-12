@@ -117,14 +117,12 @@ session.headers.update(headers)
 
 ## Define download folder name
 download_directory = 'tropomi_download_' +  product + '_' + date_str
-check_set = set() #set for checking successful response
 
 ## Loop over queries to extract
 for url, title in zip(urls, titles):
     filename = title[:-3] + '.zip'
     response = session.get(url, stream=True) # Make GET request for url
     
-    if response.status_code == 200: # Check if the request was successful
         # zip_buffer = io.BytesIO(response.content) # create file for ZIP  memory
         print(from_buffer(response.content)) #NOTE: This is no longer a zip file! Now its hdf5
 
@@ -142,6 +140,4 @@ for url, title in zip(urls, titles):
         print(f"Failed to download: {filename} from {url} (Status code: {response.status_code})") 
         print(response.text)
 
-if check_set == {200}:
-    print('Download complete')
-
+    response.raise_for_status()
