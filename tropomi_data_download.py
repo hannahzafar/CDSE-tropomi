@@ -5,12 +5,14 @@ import requests
 import json
 from datetime import datetime, time
 import pandas as pd
+import xarray as xr
 import sys 
 import os
 import zipfile
 import io
 import argparse
 import configparser
+from magic import from_buffer
 
 ### Functions ##########
 def valid_date(date_str):
@@ -116,11 +118,19 @@ for url, title in zip(urls, titles):
     response = session.get(url, stream=True) # Make GET request for url
     
     if response.status_code == 200: # Check if the request was successful
-        zip_buffer = io.BytesIO(response.content) # create file for ZIP  memory
-        with zipfile.ZipFile(zip_buffer, 'r') as zip_file: 
-            zip_file.extractall(download_directory) # Extract files to directory
-            print(f"Extracting {filename} to {download_directory}")
-        
+        # zip_buffer = io.BytesIO(response.content) # create file for ZIP  memory
+        print(from_buffer(response.content)) #NOTE: This is no longer a zip file! Now its hdf5
+
+        # print(f" URL: {url} \n Title: {title}")
+        # print(f"Status: {response.status_code}, Content-Type: {response.headers.get('Content-Type')}")
+        # print(response.text[:20])
+
+        ds = xr.open_dataset(io.BytesIO(response.content))
+        print(ds)
+        for key, value in ds.attrs.items():
+            print(f"{key}: {repr(value)}")
+        sys.exit()
+
     else: 
         print(f"Failed to download: {filename} from {url} (Status code: {response.status_code})") 
         print(response.text)
