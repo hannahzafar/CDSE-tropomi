@@ -1,2 +1,3 @@
 .ipynb_checkpoints/
 .copernicus_auth.ini
+tropomi_download_*
