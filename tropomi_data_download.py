@@ -29,6 +29,14 @@ def get_credentials(path):
     passwd = config.get('credentials','password')
     return user, passwd
 
+def yes_no_input(prompt):
+    while True:
+        answer = input(prompt).lower()
+        if answer in {"y", "n"}:
+            return answer
+        else:
+            print("Invalid input. Enter y/n")
+
 # Parse input arguments
 parser = argparse.ArgumentParser(description='User-specified parameters')
 parser.add_argument('parameter', metavar= 'X', type=str,
@@ -117,8 +125,18 @@ session.headers.update(headers)
 
 ## Create download directory
 download_dir = 'tropomi_download_' +  product + '_' + date_str
-os.makedirs(download_dir)
-# os.makedirs(download_dir, exist_ok = True)
+
+# Test if download directory exists
+try:
+    os.makedirs(download_dir)
+except FileExistsError as e:
+    choice = yes_no_input(f"{download_dir} already exists. Overwrite directory? (y/n) ")
+    if choice == "y":
+        print("Directory overwritten.")
+        os.makedirs(download_dir, exist_ok = True)
+    else:
+        download_dir = input("Enter alternate directory name: ")
+        os.makedirs(download_dir)
 
 ## Loop over queries to extract
 for url, title in zip(urls, titles):
