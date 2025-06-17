@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Refer to tropomi_data_download.ipynb for additional details
 
 import requests
 import json
