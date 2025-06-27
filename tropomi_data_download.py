@@ -5,13 +5,10 @@ import json
 from datetime import datetime, time
 import pandas as pd
 import xarray as xr
-import sys 
 import os
-import zipfile
-import io
 import argparse
 import configparser
-from magic import from_buffer
+# from magic import from_buffer
 
 ### Functions ##########
 def valid_date(date_str):
@@ -84,7 +81,7 @@ while True:
          access_token = token_data.get('access_token')
          # Check access token retrieved + print if so
          if access_token:
-             print(f'Authentication Token Retrieved')
+             print('Authentication Token Retrieved')
              break
          else:
              print('Token not found in the response')
