@@ -11,9 +11,9 @@ import configparser
 ### Functions ##########
 def valid_date(date_str):
     try:
-        return datetime.strptime(date_str, "%Y%m%d")
+        return datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
-        raise argparse.ArgumentTypeError(f"Invalid date format: '{date_str}'. Expected YYYYMMDD.")
+        raise argparse.ArgumentTypeError(f"Invalid date format: '{date_str}'. Expected YYYY-MM-DD.")
 
 def get_credentials(path):
     config = configparser.ConfigParser()
@@ -34,7 +34,7 @@ def yes_no_input(prompt):
 parser = argparse.ArgumentParser(description='User-specified parameters')
 parser.add_argument('parameter', metavar= 'X', type=str,
                     choices=['CH4', 'CO'], help='Atmospheric parameter (CH4 or CO)')
-parser.add_argument('date', metavar='YYYYMMDD', type=valid_date, help='Date')
+parser.add_argument('date', metavar='YYYY-MM-DD', type=valid_date, help='Date')
 args = parser.parse_args()
 parameter, date = args.parameter, args.date
 
