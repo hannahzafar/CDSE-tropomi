@@ -4,11 +4,9 @@ import requests
 import json
 from datetime import datetime, time
 import pandas as pd
-import xarray as xr
 import os
 import argparse
 import configparser
-# from magic import from_buffer
 
 ### Functions ##########
 def valid_date(date_str):
