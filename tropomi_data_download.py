@@ -36,9 +36,9 @@ if parameter=='CH4':
     product = 'L2__CH4___' # SENTINEL-5P CH4 nomenclature
 elif parameter=='CO':
     product = 'L2__CO____' # SENTINEL-5P CO
-start_date = date.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] +'Z'
-end_date = datetime.combine(date,time.max).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] +'Z'
-
+# Get isoformat date start and end
+start_date = date.isoformat(timespec='milliseconds') +'Z'
+end_date = datetime.combine(date,time.max).isoformat(timespec='milliseconds') +'Z'
 # Define authentication variables
 host = 'identity.dataspace.copernicus.eu'
 client_id = 'cdse-public'
