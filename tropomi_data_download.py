@@ -25,17 +25,16 @@ def yes_no_input(prompt):
 
 # Parse input arguments
 parser = argparse.ArgumentParser(description='User-specified parameters')
-parser.add_argument('parameter', metavar= 'X', type=str,
-                    choices=['CH4', 'CO'], help='Atmospheric parameter (CH4 or CO)')
+varlist = ['ch4', 'co', 'hcho', 'so2', 'no2', 'o3']
+parser.add_argument('var', metavar= 'var', type=str,
+                    choices=varlist, help=f'Atmospheric gas ({', '.join(varlist)})')
 parser.add_argument('date', metavar='YYYY-MM-DD', type=valid_date, help='Date')
 args = parser.parse_args()
-parameter, date = args.parameter, args.date
+var, date = args.var, args.date
 
 # Define querying variables
-if parameter=='CH4':
-    product = 'L2__CH4___' # SENTINEL-5P CH4 nomenclature
-elif parameter=='CO':
-    product = 'L2__CO____' # SENTINEL-5P CO
+product = f"L2__{var.upper()}{'_' * (6 - len(var))}"
+
 # Get isoformat date start and end
 start_date = date.isoformat(timespec='milliseconds') +'Z'
 end_date = datetime.combine(date,time.max).isoformat(timespec='milliseconds') +'Z'
