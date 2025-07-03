@@ -1,3 +1,3 @@
 This repository includes scripts related to access of TROPOMI CH4 and CO data from the Copernicus Data Space Ecosystem (CDSE). 
 
-Users will need a Copernicus Data Space Ecosystem account to access CDSE data, which can be created for free at https://identity.dataspace.copernicus.eu/auth/realms/CDSE/login-actions/registration?client_id=cdse-public&tab_id=pbzgerxA-tk. User authentication is achieved via an .ini-style configuration file. Refer to the example copernicus_auth.example.ini for syntax.
+Users will need a Copernicus Data Space Ecosystem account to access CDSE data, which can be created for free at https://identity.dataspace.copernicus.eu/auth/realms/CDSE/login-actions/registration?client_id=cdse-public&tab_id=pbzgerxA-tk.

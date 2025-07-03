@@ -6,7 +6,7 @@ from datetime import datetime, time
 import pandas as pd
 import os
 import argparse
-import configparser
+from netrc import netrc
 
 ### Functions ##########
 def valid_date(date_str):
@@ -14,13 +14,6 @@ def valid_date(date_str):
         return datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
         raise argparse.ArgumentTypeError(f"Invalid date format: '{date_str}'. Expected YYYY-MM-DD.")
-
-def get_credentials(path):
-    config = configparser.ConfigParser()
-    config.read(path)
-    user = config.get('credentials','username')
-    passwd = config.get('credentials','password')
-    return user, passwd
 
 def yes_no_input(prompt):
     while True:
@@ -47,23 +40,14 @@ start_date = date.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] +'Z'
 end_date = datetime.combine(date,time.max).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] +'Z'
 
 # Define authentication variables
+host = 'identity.dataspace.copernicus.eu'
 client_id = 'cdse-public'
 token_url = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
 grant_type = 'password'
 
-# Locate authentication credentials
-primary_path = './.copernicus_auth.ini'
-backup_path ='./.copernicus_auth.example.ini' 
-if os.path.exists(primary_path) and os.path.isfile(primary_path):
-    auth_path = primary_path
-elif os.path.exists(backup_path) and os.path.isfile(backup_path):
-    auth_path = backup_path
-else:
-    raise FileNotFoundError("Authentication credentials not found (refer to documentation)")
-
 # Obtain Authentication Token
 while True:
-    username, password = get_credentials(auth_path)
+    username, _, password = netrc().authenticators(host)
     auth_data = {'client_id': client_id, 'username': username, 'password': password, 
                'grant_type': grant_type}
     
