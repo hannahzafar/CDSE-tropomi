@@ -11,8 +11,7 @@ import configparser
 ### Functions ##########
 def valid_date(date_str):
     try:
-        datetime.strptime(date_str, "%Y%m%d")
-        return date_str
+        return datetime.strptime(date_str, "%Y%m%d")
     except ValueError:
         raise argparse.ArgumentTypeError(f"Invalid date format: '{date_str}'. Expected YYYYMMDD.")
 
@@ -37,8 +36,7 @@ parser.add_argument('parameter', metavar= 'X', type=str,
                     choices=['CH4', 'CO'], help='Atmospheric parameter (CH4 or CO)')
 parser.add_argument('date', metavar='YYYYMMDD', type=valid_date, help='Date')
 args = parser.parse_args()
-parameter, date_str = args.parameter, args.date
-date = datetime.strptime(date_str, "%Y%m%d")
+parameter, date = args.parameter, args.date
 
 # Define querying variables
 if parameter=='CH4':
@@ -118,12 +116,12 @@ session = requests.Session()
 session.headers.update(headers)
 
 ## Create download directory
-download_dir = 'tropomi_download_' +  product + '_' + date_str
+download_dir = 'tropomi_download_' +  product + '_' + date.strftime('%Y-%m-%d')
 
 # Test if download directory exists
 try:
     os.makedirs(download_dir)
-except FileExistsError as e:
+except FileExistsError:
     choice = yes_no_input(f"{download_dir} already exists. Overwrite directory? (y/n) ")
     if choice == "y":
         print("Directory overwritten.")
