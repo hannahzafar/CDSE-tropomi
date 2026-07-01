@@ -1,4 +1,62 @@
+from eodag import EODataAccessGateway, SearchResult
+from eodag import setup_logging
+import os
+
+
 def main():
+    # Set download space
+    workspace = "eodag_workspace_download"
+    if not os.path.isdir(workspace):
+        os.mkdir(workspace)
+    os.environ["EODAG__COP_DATASPACE__DOWNLOAD__OUTPUT_DIR"] = os.path.abspath(
+        workspace
+    )
+
+    # Open access gateway and set Copernicus Data Space Ecosystem as provider
+    dag = EODataAccessGateway()
+    dag.set_preferred_provider("cop_dataspace")
+
+    # Search for Sentinel-5P Aerosol Index data over a specific time
+    search_results = dag.search_all(
+        collection="S5P_L2_AER_AI",
+        start="2024-01-01",
+        # end="2024-12-31",
+        end="2024-06-01",
+        raise_errors=True,
+    )
+    total_count = len(search_results)
+    print(f"Found {total_count} products.")
+
+    # Check product is available for download/filter search
+    online_search_results = search_results.filter_property(
+        **{"order:status": "succeeded"}
+    )
+    search_to_download = SearchResult(online_search_results)
+    print(f"Total files available for download: {len(search_to_download)}.")
+
+    # Check sizes
+    total_size = 0
+    total_NA = 0
+    for product in search_to_download:
+        # print(f"{product}, properties: {product.properties.keys()}") # Check availalbe properties
+        size_bytes = product.properties.get("file:size")
+        if size_bytes:
+            size_in_mb = int(size_bytes) / (1024 * 1024)
+            total_size = total_size + size_in_mb
+            # print(f"{product}, Est size: {size_in_mb:.2f} MB")
+        else:
+            total_NA = total_NA + 1
+            # print(f"{product}, Est size: not avail")
+    print(
+        f"Total size of download: {total_size:.2f} MB. \nNumber of products without size property: {total_NA}"
+    )
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    products_to_download = search_to_download
+    paths = dag.download_all(
+        products_to_download, executor=ThreadPoolExecutor(max_workers=2)
+    )
 
 
 if __name__ == "__main__":
