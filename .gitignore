@@ -1,1 +1,4 @@
 .python-version
+eodag_workspace_download/
+output*.log
+
