@@ -22,7 +22,7 @@ DEFOUT = '.'
 MAXTRIES = 10
 
 token_url = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
-opensearch_url = 'https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel5P/search.json'
+odata_url = 'https://catalogue.dataspace.copernicus.eu/odata/v1/Products'
 
 def get_date(ss):
     try:
@@ -65,21 +65,40 @@ def get_orbits(var, date, mode=None, ver=DEFVER):
     date0 = date - timedelta(days=1)
     dateF = date + timedelta(days=2)
 
-    # Define querying variables
-    # A full list of options is available at?
-    # https://catalogue.dataspace.copernicus.eu/resto/api/collections/Sentinel5P/describe.xml
+
+
+    # Fix for OpenSearch deprecation:
+    # Build filter from parameters
+    print(product)
+    collection = 'SENTINEL-5P'
+    filter_parts = [
+        f"Collection/Name eq '{collection}'",
+        f"ContentDate/Start gt {date0.isoformat(timespec='milliseconds') + 'Z'}",
+        f"ContentDate/Start lt {dateF.isoformat(timespec='milliseconds') + 'Z'}",
+        f"Attributes/OData.CSC.StringAttribute/any("
+        f"att:att/Name eq 'productType' and "
+        f"att/OData.CSC.StringAttribute/Value eq '{product}')"
+    ]
+    
     query_params = {
-        'productType': product,
-#       'sensorMode': 'OFFL', # doesn't work
-        'startDate': date0.isoformat(timespec='milliseconds') + 'Z',
-        'completionDate': dateF.isoformat(timespec='milliseconds') + 'Z',
-        'sortParam': 'startDate',
-        'sortOrder': 'ascending',
-        'maxRecords': 2000,
+        "$filter": " and ".join(filter_parts)
     }
 
     # Make a get request to the OpenSearch catalog
-    response = requests.get(opensearch_url, params=query_params).json()
+    # response = requests.get(opensearch_url, params=query_params).json()
+    response = requests.get(odata_url, params=query_params).json()
+    # print(response)
+    # sys.exit()
+
+    df = pd.DataFrame.from_dict(response['value'])
+    print(len(df))
+    print(df['Name'][0])
+    sys.exit()
+    # columns_to_print = ['Id', 'Name','S3Path','GeoFootprint']
+    columns_to_print = ['Name','S3Path']
+    print(df[columns_to_print])
+    sys.exit()
+
     # Check for errors
     if response.get('features') is None:
         print(response)
