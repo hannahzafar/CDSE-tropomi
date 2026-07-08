@@ -81,6 +81,7 @@ def main():
 
     from concurrent.futures import ThreadPoolExecutor
 
+    setup_logging(verbose=2, no_progress_bar=True)
     products_to_download = search_to_download
     paths = dag.download_all(
         products_to_download, executor=ThreadPoolExecutor(max_workers=2)
