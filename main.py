@@ -1,9 +1,38 @@
+import argparse
 from eodag import EODataAccessGateway, SearchResult
 from eodag import setup_logging
 import os
 
 
 def main():
+    # parse inputs
+    parser = argparse.ArgumentParser(
+        description="Search Copernicus Data Space Ecosystem via EODAG."
+    )
+
+    parser.add_argument(
+        "-c",
+        "--collection",
+        type=str,
+        default="S5P_L2_AER_AI",
+        help="EODAG product type (e.g., S5P_L2_AER_AI, S5P_L2_AER_LH). Default: S5P_L2_AER_AI",
+    )
+    parser.add_argument(
+        "-s",
+        "--start",
+        type=str,
+        required=True,
+        help="Start date in YYYY-MM-DD format (e.g., 2023-08-01)",
+    )
+    parser.add_argument(
+        "-e",
+        "--end",
+        type=str,
+        required=True,
+        help="End date in YYYY-MM-DD format (e.g., 2023-08-02)",
+    )
+
+    args = parser.parse_args()
     # Set download space
     workspace = "eodag_workspace_download"
     if not os.path.isdir(workspace):
@@ -18,10 +47,9 @@ def main():
 
     # Search for Sentinel-5P Aerosol Index data over a specific time
     search_results = dag.search_all(
-        collection="S5P_L2_AER_AI",
-        start="2024-01-01",
-        # end="2024-12-31",
-        end="2024-06-01",
+        collection=args.collection,
+        start=args.start,
+        end=args.end,
         raise_errors=True,
     )
     total_count = len(search_results)
