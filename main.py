@@ -60,7 +60,7 @@ def main():
         **{"order:status": "succeeded"}
     )
     search_to_download = SearchResult(online_search_results)
-    print(f"Total files available for download: {len(search_to_download)}.")
+    print(f"Total files available for download: {len(search_to_download)}")
 
     # Check sizes
     total_size = 0
@@ -76,16 +76,26 @@ def main():
             total_NA = total_NA + 1
             # print(f"{product}, Est size: not avail")
     print(
-        f"Total size of download: {total_size:.2f} MB. \nNumber of products without size property: {total_NA}"
+        f"Total size of download: {total_size:.2f} MB \nNumber of products without size property: {total_NA}\n\n"
     )
 
     from concurrent.futures import ThreadPoolExecutor
 
     setup_logging(verbose=2, no_progress_bar=True)
     products_to_download = search_to_download
-    paths = dag.download_all(
-        products_to_download, executor=ThreadPoolExecutor(max_workers=2)
-    )
+    count_download = 0
+    count_fail = 0
+    for product in products_to_download:
+        try:
+            download_path = dag.download(product)
+            print(f"Download complete: {download_path}\n")
+            count_download += 1
+        except Exception as e:
+            title = product.properties.get("title", "Unknown Product")
+            print(f"Failed to download {title}. \nError: {e}\n")
+            count_fail += 1
+
+    print(f"\n\n{count_download}/{len(products_to_download)} Downloads complete")
 
 
 if __name__ == "__main__":
