@@ -2,7 +2,7 @@
 
 # Create a unique job ID using the script's Process ID ($$)
 JOB_ID=$(date +"%Y%m%d_%H%M%S")
-LOG_FILE="download_job_${JOB_ID}.log"
+LOG_FILE="logs/download_job_${JOB_ID}.log"
 
 # Run the script, passing all arguments ($@), and pipe to the unique log file
 nohup ./bin/run_eodag_download.sh "$@" > "$LOG_FILE" 2>&1 &
