@@ -8,8 +8,8 @@ PYTHON_SCRIPT="$SCRIPT_DIR/../main.py"
 
 # Set default values
 COLLECTION=${1:-"S5P_L2_AER_AI"} # Aerosols collection
-START_DATE="2024-06-01"
-END_DATE=${3:-"2024-12-31"}
+START_DATE="2025-01-01"
+END_DATE=${3:-"2025-05-31"}
 
 echo "Running eodag CDSE search and download..."
 echo "Collection: $COLLECTION | Dates: $START_DATE to $END_DATE"
