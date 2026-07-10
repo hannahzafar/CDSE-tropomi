@@ -6,10 +6,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Define the path to main.py (one directory up from bin/)
 PYTHON_SCRIPT="$SCRIPT_DIR/../main.py"
 
-# Set default values
-COLLECTION=${1:-"S5P_L2_AER_AI"} # Aerosols collection
-START_DATE="2025-01-01"
-END_DATE=${3:-"2025-05-31"}
+# Set default collection (Aerosols)
+COLLECTION=${3:-"S5P_L2_AER_AI"} 
+
+# Start/end date as input args
+START_DATE=$1
+END_DATE=$2
+# START_DATE="2025-01-01"
+# END_DATE="2025-05-31"
 
 echo "Running eodag CDSE search and download..."
 echo "Collection: $COLLECTION | Dates: $START_DATE to $END_DATE"
