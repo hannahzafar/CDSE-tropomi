@@ -1,4 +1,6 @@
 .python-version
 eodag_workspace_download/
 logs/
+fileslist*.txt
+
 
